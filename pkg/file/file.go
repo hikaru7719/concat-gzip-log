@@ -8,7 +8,14 @@ import (
 )
 
 type FileWriter struct {
+	name string
 	file io.WriteCloser
+}
+
+func NewFileWriter(name string) *FileWriter {
+	return &FileWriter{
+		name: name,
+	}
 }
 
 func (f *FileWriter) Open(path string) {
@@ -23,8 +30,7 @@ func (f *FileWriter) Close() {
 	f.file.Close()
 }
 
-func (f *FileWriter) Copy(reader io.ReadCloser) {
-	defer reader.Close()
+func (f *FileWriter) Copy(reader io.Reader) {
 	r, err := gzip.NewReader(reader)
 	if err != nil {
 		log.Print(err)
@@ -32,14 +38,14 @@ func (f *FileWriter) Copy(reader io.ReadCloser) {
 	io.Copy(f.file, r)
 }
 
-func (f *FileWriter) CopyAll(readers []io.ReadCloser) {
+func (f *FileWriter) CopyAll(readers []io.Reader) {
 	for _, r := range readers {
 		f.Copy(r)
 	}
 }
 
-func (f *FileWriter) Run(path string, readers []io.ReadCloser) {
-	f.Open(path)
+func (f *FileWriter) Run(readers []io.Reader) {
+	f.Open(f.name)
 	defer f.Close()
 	f.CopyAll(readers)
 }

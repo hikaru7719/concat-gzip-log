@@ -42,9 +42,8 @@ type StorageReader struct {
 func NewStorageReader(bucket string, date time.Time) *StorageReader {
 	cfg, err := config.LoadDefaultConfig(context.Background())
 	if err != nil {
-
+		log.Print(err)
 	}
-
 	return &StorageReader{
 		client: s3.NewFromConfig(cfg),
 		bucket: bucket,
@@ -96,7 +95,7 @@ func (s *StorageReader) List() []string {
 	return s.Filter(out.Contents)
 }
 
-func (s *StorageReader) GetObject(key string) bytes.Buffer {
+func (s *StorageReader) GetObject(key string) io.Reader {
 	out, err := s.client.GetObject(context.Background(), &s3.GetObjectInput{
 		Bucket: aws.String(s.bucket),
 		Key:    aws.String(key),
@@ -107,17 +106,22 @@ func (s *StorageReader) GetObject(key string) bytes.Buffer {
 	return s.CopyBuffer(out.Body)
 }
 
-func (s *StorageReader) CopyBuffer(body io.ReadCloser) bytes.Buffer {
+func (s *StorageReader) CopyBuffer(body io.ReadCloser) io.Reader {
 	var buf bytes.Buffer
 	defer body.Close()
 	io.Copy(&buf, body)
-	return buf
+	return &buf
 }
 
-func (s *StorageReader) GetAllObject(keys []string) []bytes.Buffer {
-	result := make([]bytes.Buffer, 0)
+func (s *StorageReader) GetAllObject(keys []string) []io.Reader {
+	result := make([]io.Reader, 0)
 	for _, k := range keys {
 		result = append(result, s.GetObject(k))
 	}
 	return result
+}
+
+func (s *StorageReader) Run() []io.Reader {
+	keys := s.List()
+	return s.GetAllObject(keys)
 }

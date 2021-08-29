@@ -3,22 +3,12 @@ package main
 import (
 	"log"
 	"os"
+
+	"github.com/hikaru7719/concat-gzip-log/cmd"
 )
 
-type Command struct {
-}
-
-func NewCommand() *Command {
-	return &Command{}
-}
-
-func (c *Command) Run() error {
-	return nil
-}
-
 func main() {
-	command := NewCommand()
-	if err := command.Run(); err != nil {
+	if err := cmd.NewCommand().Execute(); err != nil {
 		log.Println(err)
 		os.Exit(1)
 	}
