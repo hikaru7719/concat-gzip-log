@@ -47,7 +47,7 @@ func NewCommand() *Command {
 	}
 	command.PersistentFlags().StringP("bucket", "b", "", "specify target bucket name")
 	command.PersistentFlags().StringP("date", "d", "", "specify target date YYYY-MM-DD")
-	command.PersistentFlags().StringP("name", "n", "concat-gzip-log.txt", "specify output file name")
+	command.PersistentFlags().StringP("name", "n", "access-log.txt", "specify output file name")
 	command.PersistentFlags().BoolP("parallel", "p", false, "run parallel")
 	return &Command{command}
 }

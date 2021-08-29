@@ -36,6 +36,7 @@ func (f *FileWriter) Copy(reader io.Reader) {
 		log.Print(err)
 	}
 	io.Copy(f.file, r)
+	f.file.Write([]byte("\n"))
 }
 
 func (f *FileWriter) CopyAll(readers []io.Reader) {
