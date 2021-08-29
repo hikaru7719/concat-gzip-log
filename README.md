@@ -4,11 +4,7 @@ concat-gzip-log is a cli tool to concat gzip file on AWS S3 and download.
 
 # background
 
-CloudFront(or API Gateway) generates standard log to S3. Generated log file is compressed by gzip. If you want to analyse log file, you must use analyse tool like Athena. In Production environment, you should use Athena to analyse access log. But it is too much cost to use Athena in test environment, staging environment. (If you don't care, you should use Athena. )
-
-So, I made this tool.
-
-You can analyse access log file locally, If you this cli.
+CloudFront(or API Gateway) generates standard log to S3. Generated log file is compressed by gzip. If you want to analyse log file, you must use analyse tool like Athena. In production environment, you should use Athena to analyse access log. But it is too much cost to use Athena in test environment, staging environment. (If you don't care, you should use Athena. ) So, I made this tool. You can analyse access log file locally, If you this cli.
 
 # how to use
 
