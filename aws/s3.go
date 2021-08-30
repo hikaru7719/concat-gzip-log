@@ -125,3 +125,15 @@ func (s *StorageReader) Run() []io.Reader {
 	keys := s.List()
 	return s.GetAllObject(keys)
 }
+
+func (s *StorageReader) RunP() <-chan io.Reader {
+	c := make(chan io.Reader, 3)
+	go func() {
+		defer close(c)
+		keys := s.List()
+		for _, k := range keys {
+			c <- s.GetObject(k)
+		}
+	}()
+	return c
+}

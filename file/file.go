@@ -50,3 +50,11 @@ func (f *FileWriter) Run(readers []io.Reader) {
 	defer f.Close()
 	f.CopyAll(readers)
 }
+
+func (f *FileWriter) RunP(c <-chan io.Reader) {
+	f.Open(f.name)
+	defer f.Close()
+	for reader := range c {
+		f.Copy(reader)
+	}
+}

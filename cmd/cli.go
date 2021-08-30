@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/hikaru7719/concat-gzip-log/pkg/runner"
+	"github.com/hikaru7719/concat-gzip-log/runner"
 	"github.com/spf13/cobra"
 )
 
@@ -35,13 +35,24 @@ func NewCommand() *Command {
 				return err
 			}
 
+			p, err := cmd.Flags().GetBool("parallel")
+			if err != nil {
+				log.Print(err)
+				return err
+			}
+
 			t, err := convertToTime(d)
 			if err != nil {
 				log.Print(err)
 				return err
 			}
 
-			runner.NewRunner(b, t, n).Run()
+			r := runner.NewRunner(b, t, n)
+			if p {
+				r.RunP()
+			} else {
+				r.Run()
+			}
 			return nil
 		},
 	}
