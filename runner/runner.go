@@ -4,8 +4,8 @@ import (
 	"io"
 	"time"
 
-	"github.com/hikaru7719/concat-gzip-log/pkg/aws"
-	"github.com/hikaru7719/concat-gzip-log/pkg/file"
+	"github.com/hikaru7719/concat-gzip-log/aws"
+	"github.com/hikaru7719/concat-gzip-log/file"
 )
 
 type Reader interface {
